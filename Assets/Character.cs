@@ -3,7 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour {
+public class Character : MonoBehaviour {
 
     Animator playerAnimator;
     Rigidbody rb;
@@ -18,27 +18,38 @@ public class Player : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void FixedUpdate () {
-        var v = Input.GetAxis("Vertical");
-        var h = Input.GetAxis("Horizontal");
+    void FixedUpdate ()
+    {
+        playerAnimator.applyRootMotion = Grounded();
+        playerAnimator.SetBool("grounded", Grounded());
+    }
 
+    public bool Grounded()
+    {
+        return Mathf.Abs(Vector3.Dot(rb.velocity, Vector3.up)) < 0.01;
+    }
 
-        playerAnimator.SetFloat("forwardSpeed", v);
-        playerAnimator.SetFloat("turnSpeed", h);
-
-        if (Input.GetButtonDown("Duck"))
-        {
-            playerAnimator.SetTrigger("duck");
-        }
-
-        if (Input.GetButtonDown("Jump"))
+    public void Jump()
+    {
+        if (Grounded())
         {
             playerAnimator.SetTrigger("jump");
             rb.velocity += Vector3.up * upJumpSpeed + transform.forward * forwardJumpSpeed;
         }
+    }
 
-        bool grounded = Mathf.Abs(Vector3.Dot(rb.velocity, Vector3.up)) < 0.01;
-        playerAnimator.applyRootMotion = grounded;
-        playerAnimator.SetBool("grounded", grounded);
+    public void Duck()
+    {
+        playerAnimator.SetTrigger("duck");
+    }
+
+    public void SetTurnSpeed(float speed)
+    {
+        playerAnimator.SetFloat("turnSpeed", speed);
+    }
+
+    public void SetForwardSpeed(float speed)
+    {
+        playerAnimator.SetFloat("forwardSpeed", speed);
     }
 }
