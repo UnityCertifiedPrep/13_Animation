@@ -75,6 +75,3 @@
 + The Exit and Entry nodes.
 + Animator Layers and when to use them.
 + Encapsulating Sub-State Machines.
-
----
-Find out more about our [Unity Certification Preparation Course](https://www.udemy.com/unitycert?couponCode=GitHubDiscount).
